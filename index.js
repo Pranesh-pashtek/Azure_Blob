@@ -243,7 +243,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             Status: "File uploaded successfully",
             Blob_URL: `${blockBlobClient.url}`,
             File_Name: `${fileName}`,
-            Preview_URL: "http://localhost:3000/preview/"+`${fileName}`,
+            Preview_URL: "https://azure-blob.onrender.com/preview/"+`${fileName}`,
             File_Type:  contentType,
             File_Size: fileSize,
             LastModified_Date: blobProperties.lastModified,
