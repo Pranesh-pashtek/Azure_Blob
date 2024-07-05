@@ -291,11 +291,44 @@ app.get('/blob', async (req, res) => {
   // };
   })
 
-  app.get('/preview/:blobName', async (req, res) => {
-    const blobName = req.params.blobName;
+//   app.get('/preview/:blobName', async (req, res) => {
+//     const blobName = req.params.blobName;
 
-    try {
-        const containerClient = blobServiceClient.getContainerClient(containerName1);
+//     try {
+//         const containerClient = blobServiceClient.getContainerClient(containerName1);
+//         const blobClient = containerClient.getBlobClient(blobName);
+//         const downloadBlockBlobResponse = await blobClient.download(0);
+        
+//         // Set appropriate content type for previewing
+//         const contentType = downloadBlockBlobResponse.contentType;
+//         // console.log(contentType,"-----------------------------------------------------------");
+//         res.setHeader('Content-Type', contentType);
+
+//         // Pipe the blob content to the response
+//         downloadBlockBlobResponse.readableStreamBody.pipe(res);
+//     } catch (error) {
+//         console.error('Error downloading blob:', error.message);
+//         res.status(500).send('Error retrieving blob');
+//     }
+// });
+
+ app.get('/preview/:blobName', async (req, res) => {
+    const account_Key =req.headers['accesskey'];
+    const blobName = req.params.blobName;   
+
+    console.log(account_Key,"ppppppppppp");   
+    
+    try {      
+      // console.log(blobServiceClient0,"huuuuuuuuuuuuuuuuuuuuuuuu");
+      if(!account_Key){
+        res.status(400).json({
+          Status : "Invalid AZURE STORAGE CONNECTION STRING"
+        })
+      }else{
+        const credentials1 = new StorageSharedKeyCredential(accountName, account_Key);
+
+    const blobServiceClient0 = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, credentials1);
+        const containerClient = blobServiceClient0.getContainerClient(containerName1);
         const blobClient = containerClient.getBlobClient(blobName);
         const downloadBlockBlobResponse = await blobClient.download(0);
         
@@ -306,6 +339,7 @@ app.get('/blob', async (req, res) => {
 
         // Pipe the blob content to the response
         downloadBlockBlobResponse.readableStreamBody.pipe(res);
+      }
     } catch (error) {
         console.error('Error downloading blob:', error.message);
         res.status(500).send('Error retrieving blob');
@@ -314,52 +348,6 @@ app.get('/blob', async (req, res) => {
 
 
 
-
-// const url = 'https://login.salesforce.com/services/oauth2/token';
-// const params = {
-//       grant_type: 'password',
-//       client_id: salesforceClientId,
-//       client_secret: salesforceClientSecret,
-//       username: salesforceUsername,
-//       password: salesforcePassword
-// };
-
-// // Make the request to get the OAuth token
-// axios.post(url, qs.stringify(params))
-//   .then(response => {
-//     console.log('Access Token::::::::::::::::::::::::::::::::::::::::::::::::::::::', response.data.access_token);
-//     // You can now use the access token to make API calls to Salesforce
-//   })
-//   .catch(error => {
-//     console.error('Error fetching access token from Salesforce:', error.response ? error.response.data : error.message);
-//   });
-
-// const Url = 'https://login.salesforce.com/services/oauth2/token';
-
-// const params = {
-//   grant_type: 'password',
-//         client_id: salesforceClientId,
-//         client_secret: salesforceClientSecret,
-//         username: salesforceUsername,
-//         password: salesforcePassword
-// };
-
-// console.log(qs.stringify(params),"00000000000000000000000000000000000000");
-
-// const data ="grant_type=password&client_id=3MVG9pRzvMkjMb6lZD5iPWTQcIRg0mhoygDMz9reFB.hvygJyNPguLwF4GFNIJSCtMEgkEREF_KAg86ZS5MAX&client_secret=312D860BE7BEA8D900FF25E4F7C2F69C1C44C9BE5ECD2793D0755F001D075D44&username=mugeshkannagk@gmail.com&password=3002012819SK@l"
-
-// // Make the POST request to Salesforce OAuth2 token endpoint
-// axios.post('https://login.salesforce.com/services/oauth2/token', data, {
-//   headers: {
-//     'Content-Type': 'application/x-www-form-urlencoded'
-//   }
-// })
-//   .then(response => {
-//     console.log('Access Token:', response.data.access_token);
-//   })
-//   .catch(error => {
-//     console.error('Error fetching access token from Salesforce:', error.response ? error.response.data : error.message);
-//   });
 
 
 app.listen(port, () => {
