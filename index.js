@@ -6,14 +6,12 @@ const path = require('path');
 const axios = require('axios');
 const cron = require('node-cron');
 const qs = require('qs');
-const cors = require('cors');
 
 const multer = require('multer');
 
 const app = express();
 const port = process.env.PORT || 3000;
 const querystring = require('node:querystring'); 
-app.use(cors());
 
 const salesforceClientId = process.env.SALESFORCE_CLIENT_ID;
 const salesforceClientSecret = process.env.SALESFORCE_CLIENT_SECRET;
